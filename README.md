@@ -1,2 +1,2 @@
 # FINM 32400 Catherine Chen
-Homework
+This repository contains my coursework submissions for FINM 32400.
