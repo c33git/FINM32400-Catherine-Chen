@@ -8,7 +8,7 @@ def parse_time(s):
 	try:
 		return datetime.strptime(s, "%Y%m%d-%H:%M:%S.%f")
 	except Exception:
-		return None
+		return None	
 
 def main():
 	parser = argparse.ArgumentParser(description='Calculate per-exchange execution metrics from fills CSV')
