@@ -92,9 +92,10 @@ def train_exchange_model(
     # Create pipeline with scaler and model
     if use_hyperparameter_tuning:
         # Use GradientBoostingRegressor with hyperparameter tuning
+        # Note: GradientBoostingRegressor doesn't support n_jobs parameter
         pipeline = Pipeline([
             ('scaler', StandardScaler()),
-            ('model', GradientBoostingRegressor(random_state=42, n_jobs=-1))
+            ('model', GradientBoostingRegressor(random_state=42))
         ])
         
         # Hyperparameter grid
@@ -122,14 +123,14 @@ def train_exchange_model(
         
     else:
         # Simple model without tuning
+        # Note: GradientBoostingRegressor doesn't support n_jobs parameter
         pipeline = Pipeline([
             ('scaler', StandardScaler()),
             ('model', GradientBoostingRegressor(
                 n_estimators=100,
                 max_depth=5,
                 learning_rate=0.1,
-                random_state=42,
-                n_jobs=-1
+                random_state=42
             ))
         ])
         

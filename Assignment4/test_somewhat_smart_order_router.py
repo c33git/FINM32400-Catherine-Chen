@@ -20,8 +20,7 @@ def sample_models():
         ('model', GradientBoostingRegressor(
             n_estimators=10,
             max_depth=3,
-            random_state=42,
-            n_jobs=1
+            random_state=42
         ))
     ])
     
@@ -30,8 +29,7 @@ def sample_models():
         ('model', GradientBoostingRegressor(
             n_estimators=10,
             max_depth=3,
-            random_state=42,
-            n_jobs=1
+            random_state=42
         ))
     ])
     
