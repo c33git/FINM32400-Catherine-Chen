@@ -206,6 +206,20 @@ def merge_executions_with_quotes(
     """
     print("Merging executions with quotes...")
     
+    # Convert categorical columns to string for merge_asof
+    # This avoids issues when categories differ between dataframes
+    # Always convert to string - safe for both categorical and regular string columns
+    executions = executions.copy()
+    quotes = quotes.copy()
+    
+    # Convert symbol to string to ensure compatibility (works for both categorical and string)
+    executions['symbol'] = executions['symbol'].astype(str)
+    quotes['symbol'] = quotes['symbol'].astype(str)
+    
+    # Re-sort after conversion (just to be safe)
+    executions = executions.sort_values(['order_time', 'symbol']).reset_index(drop=True)
+    quotes = quotes.sort_values(['timestamp', 'symbol']).reset_index(drop=True)
+    
     # Use merge_asof to find most recent quote at or before order time
     # This requires both dataframes to be sorted by timestamp and symbol
     merged = pd.merge_asof(
@@ -219,7 +233,10 @@ def merge_executions_with_quotes(
     
     # Add bid_size and ask_size if available in quotes
     if 'bid_size' in quotes.columns and 'ask_size' in quotes.columns:
-        quotes_size = quotes[['symbol', 'timestamp', 'bid_size', 'ask_size']]
+        quotes_size = quotes[['symbol', 'timestamp', 'bid_size', 'ask_size']].copy()
+        # Symbol is already string from earlier conversion, but ensure for safety
+        quotes_size['symbol'] = quotes_size['symbol'].astype(str)
+        quotes_size = quotes_size.sort_values(['timestamp', 'symbol']).reset_index(drop=True)
         merged = pd.merge_asof(
             merged,
             quotes_size,
